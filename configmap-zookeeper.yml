@@ -1,0 +1,12 @@
+---
+apiVersion : v1
+kind: ConfigMap
+metadata:
+  name: zookeeper-configmap
+data:
+  zookeeper.properties: |
+    dataDir=/opt/zookeeper.properties/
+    clientPort=2181
+    maxClientCnxns=0
+    initLimit=5
+    syncLimit=2

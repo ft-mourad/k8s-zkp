@@ -1,0 +1,24 @@
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: zookeeper-deploy
+spec:
+
+  template:
+    metadata:
+      labels:
+        app: zookeeper
+    spec:
+      containers:
+      - image: wrap/zkp:5.0
+        name: zookeeper
+        ports:
+        - containerPort: 2181
+        volumeMounts:
+        - name: zookeeper-configmap-volume
+          mountPath: /opt/zookeeper.properties
+      volumes:
+      - name: zookeeper-configmap-volume
+        configMap:
+          name: zookeeper-configmap
