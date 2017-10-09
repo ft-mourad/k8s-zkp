@@ -1,0 +1,37 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: zookeeper
+spec:
+  ports:
+    - port: 2181
+      name: zookeeper
+  selector:
+    app: zookeeper
+---
+apiVersion: apps/v1beta1
+kind: StatefulSet
+metadata:
+  name: kafka
+spec:
+  serviceName: zookeeper
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: zookeeper
+    spec:
+      containers:
+      - name: zookeeper
+        image: wrap/zkp:5.0
+        ports:
+        - containerPort: 2181
+          name: zookeeper
+        volumeMounts:
+        - name: configmap-volume
+          mountPath: /opt/zookeeper.properties
+      volumes:
+      - name: configmap-volume
+        configMap:
+          name: zookeeper-configmap
