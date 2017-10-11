@@ -1,0 +1,16 @@
+---
+{{- $root := . -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Chart.Name }}-dynamic
+  labels:
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    app: {{ .Chart.Name }}
+data:
+  zookeeper.dynamic: |
+    {{range $i := until (.Values.clustersize | int)}}
+       server.{{.}}={{$root.Chart.Name}}-{{.}}.zookeeper-headless.default.svc.cluster.local:2888:3888;2181
+    {{ end }}

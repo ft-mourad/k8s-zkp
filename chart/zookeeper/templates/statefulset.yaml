@@ -1,0 +1,40 @@
+apiVersion: apps/v1beta1
+kind: StatefulSet
+metadata:
+  name: {{ .Chart.Name }}
+  labels:
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    app: {{ .Chart.Name }}
+spec:
+  serviceName: {{ .Chart.Name }}-headless
+  replicas: {{ .Values.clustersize }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Chart.Name }}
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+      - name: {{ .Chart.Name }}
+        image: wrap/zkp:9.9.3
+        ports:
+        - containerPort: 2181
+          name: zkp-client
+        - containerPort: 2888
+          name: zkp-server
+        - containerPort: 3888
+          name: zkp-leader
+        volumeMounts:
+        - name: {{ .Chart.Name }}-volume
+          mountPath: /opt/zookeeper/config
+        - name: {{ .Chart.Name }}-dynamic-volume
+          mountPath: /opt/zookeeper/dynamic
+      volumes:
+      - name: {{ .Chart.Name }}-volume
+        configMap:
+          name: {{ .Chart.Name }}
+      - name: {{ .Chart.Name }}-dynamic-volume
+        configMap:
+          name: {{ .Chart.Name }}-dynamic
