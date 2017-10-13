@@ -18,7 +18,8 @@ spec:
     spec:
       containers:
       - name: {{ .Chart.Name }}
-        image: wrap/zkp:9.9.3
+        image: wrap/zkp:9.9.9.1
+        imagePullPolicy: Always
         ports:
         - containerPort: 2181
           name: zkp-client
@@ -31,6 +32,11 @@ spec:
           mountPath: /opt/zookeeper/config
         - name: {{ .Chart.Name }}-dynamic-volume
           mountPath: /opt/zookeeper/dynamic
+        env:
+        - name: ZK_NAME
+          value: {{ .Chart.Name }}
+        - name: ZK_REPLICAS
+          value: '{{ .Values.clustersize }}'
       volumes:
       - name: {{ .Chart.Name }}-volume
         configMap:

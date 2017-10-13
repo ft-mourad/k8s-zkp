@@ -13,10 +13,9 @@ data:
   zookeeper.properties: |
     tickTime=2000
     dataDir=/opt/zookeeper/data
-    maxClientCnxns=300
-    initLimit=20
-    syncLimit=20
-    clientPort=2181
-    server.1=zookeeper-0.zookeeper-headless.default.svc.cluster.local:2888:3888
-    server.2=zookeeper-1.zookeeper-headless.default.svc.cluster.local:2888:3888
-    server.3=zookeeper-2.zookeeper-headless.default.svc.cluster.local:2888:3888
+    maxClientCnxns=3000
+    initLimit=100
+    syncLimit=100
+    4lw.commands.whitelist=ruok, imok, mntr
+    standaloneEnabled=false
+    dynamicConfigFile=/opt/zookeeper/dynamic/zookeeper.dynamic

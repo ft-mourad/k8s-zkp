@@ -10,7 +10,7 @@ metadata:
     chart: {{ .Chart.Name }}-{{ .Chart.Version }}
     app: {{ .Chart.Name }}
 data:
-  zookeeper.dynamic: |
-    {{range $i := until (.Values.clustersize | int)}}
-       server.{{.}}={{$root.Chart.Name}}-{{.}}.zookeeper-headless.default.svc.cluster.local:2888:3888;2181
-    {{ end }}
+  zookeeper.dynamic:
+    {{range $i := until (.Values.clustersize|int)}}
+      server.{{$i|add1}}={{$root.Chart.Name}}-{{$i}}.zookeeper-headless.default.svc.cluster.local:2888:3888;2181
+    {{end}}
